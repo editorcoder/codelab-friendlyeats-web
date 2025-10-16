@@ -15,6 +15,7 @@ export async function handleReviewFormSubmission(data) {
       await getAuthenticatedAppForUser();
 
     // is currentUser actually getting passed?
+    if (currentUser) { console.log("currentUser authenticated!"); }
     if (!currentUser) {
       throw Error("currentUser not authenticated!");
     }

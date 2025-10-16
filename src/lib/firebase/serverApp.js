@@ -22,6 +22,13 @@ import { getAuth } from "firebase/auth";
 export async function getAuthenticatedAppForUser() {
   // Get the authentication ID token from the session cookie
   const authIdToken = (await cookies()).get("__session")?.value;
+  
+  // check for auth token
+  if (authIdToken) {
+    console.log("Auth ID Token exists!");
+  } else {
+    console.log("Auth ID Token not found.");
+  }
 
   // Firebase Server App is a new feature in the JS SDK that allows you to instantiate the SDK with credentials retrieved from the client & has other affordances for use in server environments.
   // Initialize the Firebase server app with the ID token

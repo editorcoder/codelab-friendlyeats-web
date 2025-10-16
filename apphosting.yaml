@@ -3,4 +3,4 @@ runConfig:
   maxInstances: 2
 env:
   - variable: GEMINI_API_KEY
-    secret: Gprojects/333401427899/secrets/GEMINI_API_KEY/versions/10
+    secret: projects/333401427899/secrets/GEMINI_API_KEY/versions/10

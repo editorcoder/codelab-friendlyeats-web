@@ -15,7 +15,7 @@
     "@genkit-ai/googleai": "^1.5.0",
     "cookies-next": "^5.1.0",
     "firebase": "^12.4.0",
-    "firebase-tools": "^14.19.1",
+    "firebase-tools": "^14.20.0",
     "genkit": "^1.5.0",
     "next": "^15.5.5",
     "react": "19.0.0",

@@ -4,11 +4,11 @@ import { addReviewToRestaurant } from "@/src/lib/firebase/firestore.js";
 import { getAuthenticatedAppForUser } from "@/src/lib/firebase/serverApp.js";
 import { getFirestore } from "firebase/firestore";
 
-// This is a next.js server action, which is an alpha feature, so
-// use with caution.
+// This is a next.js server action, which is an alpha feature, so use with caution.
 // https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions
 export async function handleReviewFormSubmission(data) {
-  const { app } = await getAuthenticatedAppForUser();
+  // per instructor, also retrieve currentUser from server-side Firebase auth, for security
+  const { app, currentUser } = await getAuthenticatedAppForUser();
   const db = getFirestore(app);
 
   await addReviewToRestaurant(db, data.get("restaurantId"), {
@@ -16,6 +16,9 @@ export async function handleReviewFormSubmission(data) {
     rating: data.get("rating"),
 
     // This came from a hidden form field.
-    userId: data.get("userId"),
+    // userId: data.get("userId")
+
+    // Alternative method by Instructor:
+    userId: currentUser.uid,
   });
 }

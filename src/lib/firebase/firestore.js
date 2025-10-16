@@ -60,6 +60,8 @@ const updateWithRating = async (
     numRatings: newNumRatings,
     sumRating: newSumRating,
     avgRating: newAverage,
+    // per Instructor, add new field for userId of person making review (security check)
+    lastReviewUserId: review.userId,
   });
 
   transaction.set(newRatingDocument, {
@@ -70,33 +72,32 @@ const updateWithRating = async (
 
 // Export an async function to add a review to a restaurant (currently not implemented)
 export async function addReviewToRestaurant(db, restaurantId, review) {
-        if (!restaurantId) {
-                throw new Error("No restaurant ID has been provided.");
-        }
+  if (!restaurantId) {
+    throw new Error("No restaurant ID has been provided.");
+  }
 
-        if (!review) {
-                throw new Error("A valid review has not been provided.");
-        }
+  if (!review) {
+    throw new Error("A valid review has not been provided.");
+  }
 
-        try {
-                const docRef = doc(collection(db, "restaurants"), restaurantId);
-                const newRatingDocument = doc(
-                        collection(db, `restaurants/${restaurantId}/ratings`)
-                );
+  try {
+    const docRef = doc(collection(db, "restaurants"), restaurantId);
+    const newRatingDocument = doc(
+      collection(db, `restaurants/${restaurantId}/ratings`)
+    );
 
-                // corrected line
-                await runTransaction(db, transaction =>
-                        updateWithRating(transaction, docRef, newRatingDocument, review)
-                );
-        } catch (error) {
-                console.error(
-                        "There was an error adding the rating to the restaurant",
-                        error
-                );
-                throw error;
-        }
+    // corrected line
+    await runTransaction(db, (transaction) =>
+      updateWithRating(transaction, docRef, newRatingDocument, review)
+    );
+  } catch (error) {
+    console.error(
+      "There was an error adding the rating to the restaurant",
+      error
+    );
+    throw error;
+  }
 }
-
 
 // Define a function to apply query filters to a Firestore query
 function applyQueryFilters(q, { category, city, price, sort }) {
@@ -206,9 +207,25 @@ export async function getRestaurantById(db, restaurantId) {
 }
 
 // Export a function to get a restaurant snapshot by ID (currently not implemented)
+// Provided by instructor via Week 9 Sharing + Support Discussion
 export function getRestaurantSnapshotById(restaurantId, cb) {
-  // Function body is empty - returns undefined
-  return;
+  if (!restaurantId) {
+    console.log("Error: Invalid ID received: ", restaurantId);
+    return;
+  }
+
+  if (typeof cb !== "function") {
+    console.log("Error: The callback parameter is not a function");
+    return;
+  }
+
+  const docRef = doc(db, "restaurants", restaurantId);
+  return onSnapshot(docRef, (docSnap) => {
+    cb({
+      ...docSnap.data(),
+      timestamp: docSnap.data().timestamp.toDate(),
+    });
+  });
 }
 
 // Export an async function to get reviews for a specific restaurant

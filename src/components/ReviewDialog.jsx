@@ -1,43 +1,58 @@
-"use client";
+/*
+editorcoder
+2025-10-16
+SRJC CS55.13 Fall 2025
+Week 8: Assignment 9: Beta Data-Driven Full-Stack App  
+ReviewDialog.jsx
+*/
+
+"use client"; // Mark this component to run on the client
 
 // This components handles the review dialog and uses a next.js feature known as Server Actions to handle the form submission
 
-import { useEffect, useLayoutEffect, useRef } from "react";
-import RatingPicker from "@/src/components/RatingPicker.jsx";
-import { handleReviewFormSubmission } from "@/src/app/actions.js";
+import { useEffect, useLayoutEffect, useRef } from "react"; // Import React hooks used by this component
+import RatingPicker from "@/src/components/RatingPicker.jsx"; // Import rating selector component
+import { handleReviewFormSubmission } from "@/src/app/actions.js"; // Import server action to handle form submission
 
 const ReviewDialog = ({
-  isOpen,
-  handleClose,
-  review,
-  onChange,
-  userId,
-  id,
+  // Define the review dialog component
+  isOpen, // Whether the dialog is open
+  handleClose, // Function to close the dialog
+  review, // Current review data
+  onChange, // Setter for review changes
+  userId, // Current user ID
+  id, // Restaurant ID
 }) => {
-  const dialog = useRef();
+  const dialog = useRef(); // Ref to the <dialog> element
 
   // dialogs only render their backdrop when called with `showModal`
   useLayoutEffect(() => {
+    // Open/close the native dialog when state changes
     if (isOpen) {
-      dialog.current.showModal();
+      // If open flag is true
+      dialog.current.showModal(); // Show the modal with backdrop
     } else {
-      dialog.current.close();
+      // Otherwise
+      dialog.current.close(); // Ensure dialog is closed
     }
-  }, [isOpen, dialog]);
+  }, [isOpen, dialog]); // Re-run when open state or ref changes
 
   const handleClick = (e) => {
+    // Handle outside-click to close dialog
     // close if clicked outside the modal
     if (e.target === dialog.current) {
-      handleClose();
+      // Clicked on the backdrop area
+      handleClose(); // Close the dialog
     }
   };
 
   return (
     <dialog ref={dialog} onMouseDown={handleClick}>
       <form
-        action={handleReviewFormSubmission}
+        action={handleReviewFormSubmission} // Use server action to process submit
         onSubmit={() => {
-          handleClose();
+          // When form submits
+          handleClose(); // Close dialog immediately
         }}
       >
         <header>
@@ -81,4 +96,4 @@ const ReviewDialog = ({
   );
 };
 
-export default ReviewDialog;
+export default ReviewDialog; // Export component as default

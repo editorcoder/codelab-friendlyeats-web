@@ -1,6 +1,6 @@
 runConfig:
   minInstances: 0
   maxInstances: 2
-env:
+env: #Gemini API key stored in Cloud Secret Manager
   - variable: GEMINI_API_KEY
     secret: projects/333401427899/secrets/GEMINI_API_KEY/versions/10
